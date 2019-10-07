@@ -1,8 +1,8 @@
 # Linguagem de Programação II
 # AC05 ADS2D - Banco
 #
-# Alunos: aluno1.sobrenome@aluno.faculdadeimpacta.com.br
-#         aluno2.sobrenome@aluno.faculdadeimpacta.com.br
+# Alunos: hadnan.basilio@aluno.faculdadeimpacta.com.br
+#         breno.abreu@aluno.faculdadeimpacta.com.br
 
 from typing import Union, List, Dict
 
@@ -19,33 +19,48 @@ class Cliente():
     """
 
     def __init__(self, nome: str, telefone: int, email: str):
-        pass
+        self.__nome = nome
+        self.__telefone = telefone
+        self.__email = email
 
     def get_nome(self) -> str:
         """Acessor do atributo Nome."""
-        pass
+        return self.__nome
 
     def get_telefone(self) -> int:
         """Acessor do atributo Telefone."""
-        pass
+        if type(self.__telefone) != int:
+            raise TypeError('Favor digitar um telefone válido.')
+        return self.__telefone
 
     def set_telefone(self, novo_telefone: int) -> None:
         """
         Mutador do atributo telefone, caso não receba um número,
         gera um TypeError
         """
-        pass
+        self.novo_telefone = novo_telefone
+        if type(self.novo_telefone) != int:
+            raise TypeError('Favor digitar um telefone válido.')
+        self.__telefone = novo_telefone
 
     def get_email(self) -> str:
         """Acessor do atributo Email."""
-        pass
+        self.lista = list(self.__email)
+        if "@" in self.lista:
+            self.__email = "".join(self.lista)
+            return self.__email
+        raise ValueError
 
     def set_email(self, novo_email: str) -> None:
         """
         Mutador do atributo Email, caso não receba um email válido
         gera um ValueError.
         """
-        pass
+        self.novo_email = novo_email
+        self.lista = list(self.novo_email)
+        if "@" in self.lista:
+            self.__email = self.novo_email
+        raise ValueError('Favor digitar um e-mail válido.')
 
 
 class Banco():
@@ -60,11 +75,11 @@ class Banco():
     contas do banco
     """
     def __init__(self, nome: str):
-        pass
+        self.nome = nome
 
     def get_nome(self) -> str:
         """Acessor do Atributo Nome."""
-        pass
+        return self.nome
 
     def abre_conta(self, clientes: List[Cliente], saldo_ini: Number) -> None:
         """
@@ -132,3 +147,10 @@ class Conta():
         Retorna uma lista com as operações (Tuplas) executadas na Conta
         '''
         pass
+
+
+if __name__ == '__main__':
+    Breno = Cliente('Breno', 15555, '1555@me.com')
+    print('Nome:', Breno.get_nome())
+    print(Breno.get_email())
+    print('Telefone:', Breno.get_telefone())
