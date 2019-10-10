@@ -1,8 +1,8 @@
 # Linguagem de Programação II
 # AC05 ADS2D - Banco
 #
-# Alunos: aluno1.sobrenome@aluno.faculdadeimpacta.com.br
-#         aluno2.sobrenome@aluno.faculdadeimpacta.com.br
+# Alunos: breno.abreu@aluno.faculdadeimpacta.com.br
+#         hadnan.basilio@aluno.faculdadeimpacta.com.br
 
 from typing import Union, List, Dict
 
@@ -19,33 +19,40 @@ class Cliente():
     """
 
     def __init__(self, nome: str, telefone: int, email: str):
-        pass
+        self.__nome = nome
+        self.set_telefone(telefone)
+        self.set_email(email)
 
     def get_nome(self) -> str:
         """Acessor do atributo Nome."""
-        pass
+        return self.__nome
 
     def get_telefone(self) -> int:
         """Acessor do atributo Telefone."""
-        pass
+        return self.__telefone
 
     def set_telefone(self, novo_telefone: int) -> None:
         """
         Mutador do atributo telefone, caso não receba um número,
         gera um TypeError
         """
-        pass
+        if type(novo_telefone) != int:
+            raise TypeError('Favor digitar um telefone válido.')
+        self.__telefone = novo_telefone
 
     def get_email(self) -> str:
         """Acessor do atributo Email."""
-        pass
+        return self.__email
 
     def set_email(self, novo_email: str) -> None:
         """
         Mutador do atributo Email, caso não receba um email válido
         gera um ValueError.
         """
-        pass
+        self.novo_email = novo_email
+        if "@" not in list(novo_email):
+            raise ValueError('Favor digitar um e-mail válido.')
+        self.__email = novo_email
 
 
 class Banco():
@@ -59,24 +66,32 @@ class Banco():
     DICA2: utilze a variável acima para gerar automaticamente o número das
     contas do banco
     """
+
     def __init__(self, nome: str):
-        pass
+        self.__nome = nome
+        self.id_cliente = 0
+        self.contas = []
 
     def get_nome(self) -> str:
         """Acessor do Atributo Nome."""
-        pass
+        return self.__nome
 
-    def abre_conta(self, clientes: List[Cliente], saldo_ini: Number) -> None:
+    def abre_conta(self, _cliente: Cliente, saldo_ini: Number) -> None:
         """
         Método para abertura de nova conta, recebe os clientes
         e o saldo inicial.
         Caso o saldo inicial seja menor que 0 devolve um ValueError
         """
-        pass
+        if saldo_ini < 0:
+            raise ValueError('Saldo insuficiente para abertura de conta')
+        self.id_cliente += 1
+        self.saldo_ini = saldo_ini
+        nova_conta = Conta(_cliente, self.id_cliente, saldo_ini)
+        self.contas.append(nova_conta)
 
     def lista_contas(self) -> List['Conta']:
         """Retorna a lista com todas as contas do banco."""
-        pass
+        return self.contas
 
 
 class Conta():
@@ -93,25 +108,32 @@ class Conta():
 
     def __init__(self, clientes: List[Cliente], numero_conta: int,
                  saldo_inicial: Number):
-        pass
+        self.__clientes = clientes
+        if type(numero_conta) != int:
+            raise ValueError
+        self.__numero_conta = numero_conta
+        self.__saldo_inicial = saldo_inicial
+        self.__saldo_atual = saldo_inicial
+        self.__extrato = []
+        self.__extrato.append(('saldo_inicial', self.__saldo_inicial))
 
     def get_clientes(self) -> List[Cliente]:
         '''
         Acessor para o atributo Clientes
         '''
-        pass
+        return self.__clientes
 
     def get_saldo(self) -> Number:
         '''
         Acessor para o Atributo Saldo
         '''
-        pass
+        return self.__saldo_inicial
 
     def get_numero(self) -> int:
         '''
         Acessor para o atributo Numero
         '''
-        pass
+        return self.__numero_conta
 
     def saque(self, valor: Number) -> None:
         '''
@@ -119,16 +141,29 @@ class Conta():
         Caso o valor do saque seja maior que o saldo da conta,
         deve retornar um ValueError, e não efetuar o saque
         '''
-        pass
+        self.valor_saque = valor
+        if self.valor_saque > self.__saldo_atual:
+            raise ValueError('Saque maior que o saldo existente na conta')
+        self.__saldo_atual -= self.valor_saque
+        self.__extrato.append(('saque', self.valor_saque))
 
     def deposito(self, valor: Number):
         '''
         Método depósito da classe Conta, operação deve aparecer no extrato
         '''
-        pass
+        self.valor_deposito = valor
+        if self.valor_deposito < 1:
+            raise ValueError('Depósito com valor inválido')
+        self.__saldo_atual += self.valor_deposito
+        self.__extrato.append(('deposito', self.valor_deposito))
 
     def extrato(self) -> List[Dict[str, Number]]:
         '''
         Retorna uma lista com as operações (Tuplas) executadas na Conta
         '''
-        pass
+        return self.__extrato
+
+
+if __name__ == '__name__':
+    c = Cliente('nome', 'não é número', 'email@mail.com')
+    print(c)
